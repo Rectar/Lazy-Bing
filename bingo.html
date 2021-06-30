@@ -1,0 +1,68 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>陽春賓果</title> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+ td.rng{
+   font-size: 24px;
+   width:30px;
+   height:30px;
+   text-align:center;
+ }
+ td.click{
+   background: gold;
+ }
+ #timeStamp,#optLength{font-size:20px;}
+</style>
+</head>
+<body>
+最後更新時間：<span id="timeStamp"></span><br>
+選擇大小：<select id="optLength" >
+<option value="1">1x1</option>
+  <option value="2">2x2</option>
+  <option value="3" selected>3x3</option>
+</select>
+<br><br>
+<table id="tblRNG" border="1">
+
+</table>
+
+<script>
+$(document).ready(function() {
+		var n = $("#optLength").val();
+		generator9(n);
+		
+		for (var i = 4;i<=20;i++){
+			$("#optLength").append(new Option(`${i}x${i}`, i));
+		}
+		
+		$("#optLength").change(function(){
+			var selectedNum = $("#optLength").val();
+			generator9(selectedNum);
+		});
+		
+		function generator9(len){
+			var t = new Date();
+			$("#timeStamp").text(`${t.toLocaleDateString()} ${t.toLocaleTimeString()}`);
+			var n = len*len;
+			var arr = new Array(n).fill(0);
+			var dataset = arr.map((x,i)=>i+1).sort(()=>.5-Math.random());
+			
+			var td = `<td class="rng"></td>`.repeat(len);
+			var tr = `<tr>${td}</tr>`.repeat(len);
+			
+			$("#tblRNG").empty().append("<tbody></tbody>");
+			$("#tblRNG").find("tbody").append(tr);
+			$("#tblRNG td.rng").each(function() {
+				$(this).html(dataset.shift());
+			});
+			
+			$(".rng").click(function(e){
+				$(e.target).toggleClass("click");
+			});
+		}
+    });
+</script>
+</body>
+</html>
